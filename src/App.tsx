@@ -9,6 +9,7 @@ import { Util } from './util';
 
 function App() {
     const [charConfigs, setCharConfigs] = useState<CharConfig[]>([]);
+    const [collapse, setCollapse] = useState<boolean>(false);
     const sets: TSet[] = useMemo(() => {
         let sets: TSet[] = [];
         for (const config of charConfigs) {
@@ -23,10 +24,12 @@ function App() {
                 className="content"
                 style={{ display: 'flex', overflow: 'auto' }}
             >
-                <CharConfigSelector
-                    selected={charConfigs}
-                    onChange={setCharConfigs}
-                />
+                {!collapse && (
+                    <CharConfigSelector
+                        selected={charConfigs}
+                        onChange={setCharConfigs}
+                    />
+                )}
                 <div
                     style={{
                         borderLeft: '1px solid black',
@@ -44,6 +47,23 @@ function App() {
                     {sets.map((set) => (
                         <SetRenderer set={set} />
                     ))}
+                    <div
+                        style={{
+                            position: 'fixed',
+                            bottom: '3px',
+                            cursor: 'pointer',
+                            border: '1px solid black',
+                            width: '25px',
+                            height: '25px',
+                            display: 'flex',
+                            justifyContent: 'center',
+                        }}
+                        onClick={() => setCollapse(!collapse)}
+                    >
+                        <span style={{ position: 'relative', top: '-2px' }}>
+                            {collapse ? '>' : '<'}
+                        </span>
+                    </div>
                 </div>
             </div>
         </div>
