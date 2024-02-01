@@ -1,8 +1,9 @@
-import { ChildrenProps } from './types/componentTypes';
-import { CharConfig, Characteristic, CharacteristicList } from './types/types';
-import imgSuccess from './res/success.png';
-import imgFail from './res/fail.png';
+import { ChildrenProps } from '../types/componentTypes';
+import { CharConfig, Characteristic, CharacteristicList } from '../types/types';
+import imgSuccess from '../res/success.png';
+import imgFail from '../res/fail.png';
 import { useMemo } from 'react';
+import { SetUtil } from '../setUtil/setUtil';
 
 type Props = {
     selected: CharConfig[];
@@ -82,8 +83,10 @@ type CardProps = {
 
 function Card({ config, selected, onChange }: CardProps) {
     const selectedIdx = useMemo(() => {
-        const cur = config.join(',');
-        const list = selected.map((config) => config.join(','));
+        const cur = SetUtil.serializeCharConfig(config);
+        const list = selected.map((config) =>
+            SetUtil.serializeCharConfig(config),
+        );
         return list.indexOf(cur);
     }, [config, selected]);
     return (
