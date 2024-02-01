@@ -1,5 +1,5 @@
-import { TCard } from '../types';
-import allCards from './allcards.png';
+import { TCard } from '../types/types';
+import allCards from '../res/allcards.png';
 
 const COL_STARTS = [30, 133, 235, 338, 441, 543, 646, 749, 851];
 const ROW_STARTS = [15, 72, 130, 187, 245, 302, 360, 417, 475];

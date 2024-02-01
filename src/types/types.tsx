@@ -28,3 +28,17 @@ export enum CardShape {
     Oval = 2,
     Squigle = 3,
 }
+
+export type Characteristic = keyof TCard;
+export const CharacteristicList: Characteristic[] = [
+    'color',
+    'number',
+    'filling',
+    'shape',
+];
+
+/**
+ * Characteristics in the array are the same.
+ * Characteristics not in the array are different.
+ */
+export type CharConfig = Characteristic[];

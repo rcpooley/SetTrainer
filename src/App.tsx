@@ -1,21 +1,25 @@
+import { useState } from 'react';
 import './App.css';
-import { CardRenderer } from './cardRenderer/cardRenderer';
+import { CharConfigSelector } from './charConfigSelector';
 import { Navbar } from './navbar';
-import { CardColor, CardFilling, CardNumber, CardShape } from './types';
+import { CharConfig } from './types/types';
 
 function App() {
+    const [charConfigs, setCharConfigs] = useState<CharConfig[]>([]);
     return (
         <div className="App">
             <Navbar />
-            <div className="content">
-                <CardRenderer
-                    card={{
-                        color: CardColor.Red,
-                        number: CardNumber.Two,
-                        filling: CardFilling.Empty,
-                        shape: CardShape.Squigle,
-                    }}
+            <div
+                className="content"
+                style={{ display: 'flex', overflow: 'auto' }}
+            >
+                <CharConfigSelector
+                    selected={charConfigs}
+                    onChange={setCharConfigs}
                 />
+                <div style={{ borderLeft: '1px solid black', flexGrow: 1 }}>
+                    sets
+                </div>
             </div>
         </div>
     );
