@@ -3,9 +3,9 @@ import './App.css';
 import { CharConfigSelector } from './components/charConfigSelector';
 import { Navbar } from './navbar';
 import { CharConfig, TSet } from './types/types';
-import { SetUtil } from './setUtil/setUtil';
+import { SetUtil } from './util/setUtil';
 import { SetRenderer } from './components/setRenderer';
-import { Util } from './util';
+import { Util } from './util/util';
 
 function App() {
     const [charConfigs, setCharConfigs] = useState<CharConfig[]>([]);

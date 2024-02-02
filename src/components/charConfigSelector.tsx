@@ -3,7 +3,7 @@ import { CharConfig, Characteristic, CharacteristicList } from '../types/types';
 import imgSuccess from '../res/success.png';
 import imgFail from '../res/fail.png';
 import { useMemo } from 'react';
-import { SetUtil } from '../setUtil/setUtil';
+import { SetUtil } from '../util/setUtil';
 
 type Props = {
     selected: CharConfig[];

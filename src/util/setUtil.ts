@@ -58,12 +58,13 @@ export class SetUtil {
         if (serialized in this._charConfigSetMap) {
             return this._charConfigSetMap[serialized];
         }
+        // store in a map to dedup sets containing the same cards
         const setMap: Record<string, TSet> = {};
         const cards = this.getCards();
         for (const card1 of Object.values(cards)) {
             const nextCards = this.filterCardsMatching(card1, config);
             for (const card2 of nextCards) {
-                const card3 = this.getThirdCard(card1, card2, config);
+                const card3 = this.getThirdCard(card1, card2);
                 const set = [card1, card2, card3];
                 setMap[this.serializeSet(set)] = set;
             }
@@ -85,22 +86,18 @@ export class SetUtil {
         });
     }
 
-    static getThirdCard(card1: TCard, card2: TCard, config: CharConfig): TCard {
+    static getThirdCard(card1: TCard, card2: TCard): TCard {
         const card: any = {};
         for (const char of CharacteristicList) {
+            const c1 = card1[char];
+            const c2 = card2[char];
             // matching characteristic
-            if (config.includes(char)) {
-                if (card1[char] !== card2[char]) {
-                    throw new Error('invalid card1 and card2');
-                }
-                card[char] = card1[char];
+            if (c1 === c2) {
+                card[char] = c1;
             }
             // not matching characteristic
             else {
-                if (card1[char] === card2[char]) {
-                    throw new Error('invalid card1 and card2');
-                }
-                const curValues = [card1[char], card2[char]];
+                const curValues = [c1, c2];
                 card[char] = CharacteristicValues.find(
                     (val) => !curValues.includes(val),
                 );
