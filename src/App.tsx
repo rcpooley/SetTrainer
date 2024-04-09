@@ -1,10 +1,9 @@
 import { useMemo, useState } from 'react';
-import './App.css';
 import { CharConfigSelector } from './components/charConfigSelector';
+import { SetRenderer } from './components/setRenderer';
 import { Navbar } from './navbar';
 import { CharConfig, TSet } from './types/types';
 import { SetUtil } from './util/setUtil';
-import { SetRenderer } from './components/setRenderer';
 import { Util } from './util/util';
 
 function App() {
@@ -18,12 +17,15 @@ function App() {
         return sets;
     }, [charConfigs]);
     return (
-        <div className="App">
+        <div
+            css={{
+                height: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+            }}
+        >
             <Navbar />
-            <div
-                className="content"
-                style={{ display: 'flex', overflow: 'auto' }}
-            >
+            <div css={{ display: 'flex', overflow: 'auto', flexGrow: 1 }}>
                 {!collapse && (
                     <CharConfigSelector
                         selected={charConfigs}
@@ -31,7 +33,7 @@ function App() {
                     />
                 )}
                 <div
-                    style={{
+                    css={{
                         borderLeft: '1px solid black',
                         flexGrow: 1,
                         overflow: 'auto',
@@ -41,14 +43,14 @@ function App() {
                         gap: '10px',
                     }}
                 >
-                    <div style={{ fontWeight: 'bold', fontSize: '20px' }}>
+                    <div css={{ fontWeight: 'bold', fontSize: '20px' }}>
                         {sets.length} set{Util.plural(sets.length)}
                     </div>
                     {sets.map((set) => (
                         <SetRenderer set={set} />
                     ))}
                     <div
-                        style={{
+                        css={{
                             position: 'fixed',
                             bottom: '3px',
                             cursor: 'pointer',
@@ -60,7 +62,7 @@ function App() {
                         }}
                         onClick={() => setCollapse(!collapse)}
                     >
-                        <span style={{ position: 'relative', top: '-2px' }}>
+                        <span css={{ position: 'relative', top: '-2px' }}>
                             {collapse ? '>' : '<'}
                         </span>
                     </div>

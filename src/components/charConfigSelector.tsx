@@ -1,8 +1,8 @@
+import { useMemo } from 'react';
+import imgFail from '../res/fail.png';
+import imgSuccess from '../res/success.png';
 import { ChildrenProps } from '../types/componentTypes';
 import { CharConfig, Characteristic, CharacteristicList } from '../types/types';
-import imgSuccess from '../res/success.png';
-import imgFail from '../res/fail.png';
-import { useMemo } from 'react';
 import { SetUtil } from '../util/setUtil';
 
 type Props = {
@@ -34,7 +34,7 @@ export function CharConfigSelector(props: Props) {
     }, []);
     return (
         <div
-            style={{
+            css={{
                 width: '300px',
                 display: 'flex',
                 flexDirection: 'column',
@@ -64,7 +64,7 @@ export function CharConfigSelector(props: Props) {
 function Header({ children }: ChildrenProps) {
     return (
         <div
-            style={{
+            css={{
                 fontWeight: 'bold',
                 marginLeft: '5px',
                 marginTop: '5px',
@@ -85,14 +85,14 @@ function Card({ config, selected, onChange }: CardProps) {
     const selectedIdx = useMemo(() => {
         const cur = SetUtil.serializeCharConfig(config);
         const list = selected.map((config) =>
-            SetUtil.serializeCharConfig(config),
+            SetUtil.serializeCharConfig(config)
         );
         return list.indexOf(cur);
     }, [config, selected]);
     return (
         <div
             className="noselect"
-            style={{
+            css={{
                 border: '1px solid black',
                 width: '190px',
                 boxSizing: 'border-box',
@@ -142,7 +142,7 @@ type CardPartProps = ChildrenProps & {
 function CardPart({ included, marginRight, children }: CardPartProps) {
     return (
         <div
-            style={{
+            css={{
                 display: 'inline-flex',
                 alignItems: 'center',
                 gap: '10px',
@@ -155,7 +155,7 @@ function CardPart({ included, marginRight, children }: CardPartProps) {
                 src={included ? imgSuccess : imgFail}
                 width="20px"
                 height="20px"
-                style={{
+                css={{
                     position: 'absolute',
                     right: `${marginRight}px`,
                 }}

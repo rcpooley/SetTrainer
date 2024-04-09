@@ -33,7 +33,7 @@ export const CardFillings: CardFilling[] = CharacteristicValues;
 export enum CardShape {
     Diamond = 1,
     Oval = 2,
-    Squigle = 3,
+    Squiggle = 3,
 }
 export const CardShapes: CardShape[] = CharacteristicValues;
 
