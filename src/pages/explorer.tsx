@@ -1,12 +1,12 @@
 import { useMemo, useState } from 'react';
-import { CharConfigSelector } from './components/charConfigSelector';
-import { SetRenderer } from './components/setRenderer';
-import { Navbar } from './navbar';
-import { CharConfig, TSet } from './types/types';
-import { SetUtil } from './util/setUtil';
-import { Util } from './util/util';
+import { CharConfigSelector } from '../components/charConfigSelector';
+import { PageFrame } from '../components/pageFrame';
+import { SetRenderer } from '../components/setRenderer';
+import { CharConfig, TSet } from '../types/types';
+import { SetUtil } from '../util/setUtil';
+import { Util } from '../util/util';
 
-function App() {
+export function PageExplorer() {
     const [charConfigs, setCharConfigs] = useState<CharConfig[]>([]);
     const [collapse, setCollapse] = useState<boolean>(false);
     const sets: TSet[] = useMemo(() => {
@@ -17,15 +17,8 @@ function App() {
         return sets;
     }, [charConfigs]);
     return (
-        <div
-            css={{
-                height: '100%',
-                display: 'flex',
-                flexDirection: 'column',
-            }}
-        >
-            <Navbar />
-            <div css={{ display: 'flex', overflow: 'auto', flexGrow: 1 }}>
+        <PageFrame>
+            <div css={{ display: 'flex', height: '100%' }}>
                 {!collapse && (
                     <CharConfigSelector
                         selected={charConfigs}
@@ -46,8 +39,8 @@ function App() {
                     <div css={{ fontWeight: 'bold', fontSize: '20px' }}>
                         {sets.length} set{Util.plural(sets.length)}
                     </div>
-                    {sets.map((set) => (
-                        <SetRenderer set={set} />
+                    {sets.map((set, idx) => (
+                        <SetRenderer key={idx} set={set} />
                     ))}
                     <div
                         css={{
@@ -68,8 +61,6 @@ function App() {
                     </div>
                 </div>
             </div>
-        </div>
+        </PageFrame>
     );
 }
-
-export default App;

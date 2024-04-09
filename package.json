@@ -6,10 +6,12 @@
         "@emotion/react": "^11.11.4",
         "bootstrap": "^5.3.3",
         "react": "^18.2.0",
-        "react-dom": "^18.2.0"
+        "react-dom": "^18.2.0",
+        "react-router-dom": "^6.22.3"
     },
     "scripts": {
         "start": "parcel src/index.html",
+        "fix": "rimraf .parcel-cache && parcel src/index.html",
         "build": "parcel build"
     },
     "devDependencies": {
@@ -20,6 +22,7 @@
         "@types/react-dom": "^18.2.18",
         "parcel": "^2.12.0",
         "process": "^0.11.10",
+        "rimraf": "^5.0.5",
         "typescript": "^4.9.5"
     }
 }

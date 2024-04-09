@@ -46,9 +46,11 @@ export function CharConfigSelector(props: Props) {
             <Header>Zero shared characteristics</Header>
             <Card config={[]} {...props} />
             <Header>One shared characteristic</Header>
-            {CharacteristicList.map((char) => (
-                <Card key={char} config={[char]} {...props} />
-            ))}
+            <div>
+                {CharacteristicList.map((char) => (
+                    <Card key={char} config={[char]} {...props} />
+                ))}
+            </div>
             <Header>Two shared characteristics</Header>
             {twoSharedConfigs.map((config, idx) => (
                 <Card key={idx} config={config} {...props} />
