@@ -27,6 +27,53 @@ export class SetUtil {
         return cards.join('|');
     }
 
+    /**
+     * @returns index of value in configs array
+     */
+    static getCharConfigIndex(
+        configs: CharConfig[],
+        value: CharConfig
+    ): number {
+        return configs
+            .map((config) => this.serializeCharConfig(config))
+            .indexOf(this.serializeCharConfig(value));
+    }
+
+    /**
+     * include === undefined =>
+     *      Adds value to configs if it is not present, otherwise removes it.
+     * include === true =>
+     *      Add value to configs if it is not present
+     * include === false =>
+     *      Remvoe value from configs if it is present
+     */
+    static toggleCharConfig(
+        configs: CharConfig[],
+        value: CharConfig,
+        include?: boolean
+    ): CharConfig[] {
+        const newConfigs = configs.slice();
+        const idx = this.getCharConfigIndex(newConfigs, value);
+        if (idx >= 0 && include !== true) {
+            newConfigs.splice(idx, 1);
+        }
+        if (idx < 0 && include !== false) {
+            newConfigs.push(value);
+        }
+        return newConfigs;
+    }
+
+    static toggleCharConfigs(
+        configs: CharConfig[],
+        values: CharConfig[],
+        include?: boolean
+    ): CharConfig[] {
+        for (const value of values) {
+            configs = this.toggleCharConfig(configs, value, include);
+        }
+        return configs;
+    }
+
     private static _cards: Record<string, TCard> | null = null;
     static getCards(): Record<string, TCard> {
         if (this._cards !== null) {
@@ -99,7 +146,7 @@ export class SetUtil {
             else {
                 const curValues = [c1, c2];
                 card[char] = CharacteristicValues.find(
-                    (val) => !curValues.includes(val),
+                    (val) => !curValues.includes(val)
                 );
             }
         }

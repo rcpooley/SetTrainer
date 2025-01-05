@@ -23,6 +23,12 @@ export function PageExplorer() {
                     <CharConfigSelector
                         selected={charConfigs}
                         onChange={setCharConfigs}
+                        css={{
+                            width: '300px',
+                            overflow: 'auto',
+                            paddingBottom: '10px',
+                        }}
+                        centered
                     />
                 )}
                 <div

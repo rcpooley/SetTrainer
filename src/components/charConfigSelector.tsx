@@ -1,14 +1,20 @@
 import { useMemo } from 'react';
 import imgFail from '../res/fail.png';
 import imgSuccess from '../res/success.png';
-import { ChildrenProps } from '../types/componentTypes';
+import { ChildrenProps, MaybeClassNameProps } from '../types/componentTypes';
 import { CharConfig, Characteristic, CharacteristicList } from '../types/types';
 import { SetUtil } from '../util/setUtil';
+import { SelectableBox } from './selectableBox';
 
-type Props = {
+type Props = MaybeClassNameProps & {
     selected: CharConfig[];
     onChange: (selected: CharConfig[]) => void;
+    centered?: boolean;
+    allNone?: boolean;
 };
+
+const zeroSharedConfigs: CharConfig[] = [[]];
+const oneSharedConfigs: CharConfig[] = CharacteristicList.map((char) => [char]);
 
 export function CharConfigSelector(props: Props) {
     const twoSharedConfigs: CharConfig[] = useMemo(() => {
@@ -32,48 +38,118 @@ export function CharConfigSelector(props: Props) {
         }
         return configs;
     }, []);
+    const allConfigs: CharConfig[] = useMemo(
+        () =>
+            zeroSharedConfigs
+                .concat(oneSharedConfigs)
+                .concat(twoSharedConfigs)
+                .concat(threeSharedConfigs),
+        [],
+    );
     return (
-        <div
-            css={{
-                width: '300px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-                overflow: 'auto',
-                paddingBottom: '10px',
-            }}
-        >
-            <Header>Zero shared characteristics</Header>
-            <Card config={[]} {...props} />
-            <Header>One shared characteristic</Header>
-            <div>
-                {CharacteristicList.map((char) => (
-                    <Card key={char} config={[char]} {...props} />
-                ))}
-            </div>
-            <Header>Two shared characteristics</Header>
-            {twoSharedConfigs.map((config, idx) => (
-                <Card key={idx} config={config} {...props} />
-            ))}
-            <Header>Three shared characteristics</Header>
-            {threeSharedConfigs.map((config, idx) => (
-                <Card key={idx} config={config} {...props} />
-            ))}
+        <div className={props.className}>
+            <CardWrapper
+                header="Zero shared characteristics"
+                configs={zeroSharedConfigs}
+                {...props}
+            />
+            <CardWrapper
+                header="One shared characteristic"
+                configs={oneSharedConfigs}
+                {...props}
+            />
+            <CardWrapper
+                header="Two shared characteristics"
+                configs={twoSharedConfigs}
+                {...props}
+            />
+            <CardWrapper
+                header="Three shared characteristics"
+                configs={threeSharedConfigs}
+                {...props}
+            />
         </div>
     );
 }
 
-function Header({ children }: ChildrenProps) {
+type CardWrapperProps = Props & {
+    header: string;
+    configs: CharConfig[];
+};
+
+function CardWrapper({
+    header,
+    configs,
+    centered,
+    allNone,
+    selected,
+    onChange,
+}: CardWrapperProps) {
     return (
-        <div
-            css={{
-                fontWeight: 'bold',
-                marginLeft: '5px',
-                marginTop: '5px',
-            }}
-        >
-            {children}
-        </div>
+        <>
+            <div css={{ display: 'flex', gap: '5px', alignItems: 'center' }}>
+                <div
+                    css={{
+                        fontWeight: 'bold',
+                        marginLeft: '5px',
+                        marginTop: '10px',
+                        marginBottom: '5px',
+                    }}
+                >
+                    {header}
+                </div>
+                {allNone && (
+                    <>
+                        <button
+                            className="btn btn-sm btn-primary"
+                            onClick={() =>
+                                onChange(
+                                    SetUtil.toggleCharConfigs(
+                                        selected,
+                                        configs,
+                                        true,
+                                    ),
+                                )
+                            }
+                        >
+                            All
+                        </button>
+                        <button
+                            className="btn btn-sm btn-secondary"
+                            onClick={() =>
+                                onChange(
+                                    SetUtil.toggleCharConfigs(
+                                        selected,
+                                        configs,
+                                        false,
+                                    ),
+                                )
+                            }
+                        >
+                            None
+                        </button>
+                    </>
+                )}
+            </div>
+            <div
+                css={{
+                    display: 'flex',
+                    gap: '10px',
+                    flexWrap: 'wrap',
+                    marginLeft: '20px',
+                    justifyContent: centered ? 'center' : undefined,
+                }}
+            >
+                {configs.map((config, idx) => (
+                    <Card
+                        key={idx}
+                        config={config}
+                        selected={selected}
+                        onChange={onChange}
+                    />
+                ))}
+            </div>
+        </>
     );
 }
 
@@ -84,34 +160,20 @@ type CardProps = {
 };
 
 function Card({ config, selected, onChange }: CardProps) {
-    const selectedIdx = useMemo(() => {
-        const cur = SetUtil.serializeCharConfig(config);
-        const list = selected.map((config) =>
-            SetUtil.serializeCharConfig(config)
-        );
-        return list.indexOf(cur);
-    }, [config, selected]);
+    const selectedIdx = useMemo(
+        () => SetUtil.getCharConfigIndex(selected, config),
+        [config, selected],
+    );
     return (
-        <div
+        <SelectableBox
             className="noselect"
             css={{
-                border: '1px solid black',
                 width: '190px',
                 boxSizing: 'border-box',
-                marginTop: '5px',
                 padding: '2px 0 2px 4px',
-                backgroundColor: selectedIdx >= 0 ? '#bcf7cc' : '#ffcdcc',
-                cursor: 'pointer',
             }}
-            onClick={() => {
-                const newList = selected.slice();
-                if (selectedIdx >= 0) {
-                    newList.splice(selectedIdx, 1);
-                } else {
-                    newList.push(config);
-                }
-                onChange(newList);
-            }}
+            selected={selectedIdx >= 0}
+            onClick={() => onChange(SetUtil.toggleCharConfig(selected, config))}
         >
             <div>
                 <CardPart included={config.includes('color')} marginRight={15}>
@@ -132,7 +194,7 @@ function Card({ config, selected, onChange }: CardProps) {
                     Shape
                 </CardPart>
             </div>
-        </div>
+        </SelectableBox>
     );
 }
 
